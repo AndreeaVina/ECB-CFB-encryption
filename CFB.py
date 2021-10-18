@@ -1,7 +1,7 @@
 import pyaes
 IV = "AHJ DHS3465782^$".encode()
 encrypted_text = []
-decrypted_text = []
+decrypted_text = ""
 block_cipher_encryption = []
 
 def CFB_encryption(originalText,key):
@@ -34,9 +34,5 @@ def CFB_decryption(encryptedText,key):
             block_cipher_encryption = aes.encrypt(IV)
         else : 
             block_cipher_encryption = aes.encrypt(encryptedText[i-16:i])
-        decrypted_text += [x ^ y for (x, y) in zip(block_cipher_encryption,block)]
-    return bytes(decrypted_text).decode()
-
-#print(CFB_encryption("Ana are mere si pere si prune ","1234567890123456"))
-print(CFB_decryption(CFB_encryption("Ana are mere si pere si prune ","1234567890123456"),"1234567890123456"))
-        
+        decrypted_text += bytes([x ^ y for (x, y) in zip(block_cipher_encryption,block)]).decode()
+    return decrypted_text

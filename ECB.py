@@ -21,5 +21,4 @@ def ECB_decryption(encryptedText,key):
         block = encryptedText[i:i+16]
         decrypted_text +=  bytes(aes.decrypt(block)).decode()
     return decrypted_text
-#print(ECB_encryption("Andreea are mere si pere si prune ","1234567890123456"))
-print(ECB_decryption(ECB_encryption("Andreea are mere si pere si prune ",'1234567890123456'), '1234567890123456'))
+    

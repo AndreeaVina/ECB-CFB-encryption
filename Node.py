@@ -1,8 +1,11 @@
 import pyaes
+from CFB import CFB_decryption, CFB_encryption
+from ECB import ECB_decryption, ECB_encryption
 
 class Node :
     def __init__(self):
-         self.k = "ANDREEAVINAMADAL"
+        self.k = "ANDREEAVINAMADAL"
+        self.ciphertext = []
     #ask the user to choose between ECB encryption and CFB encryption
     def ask_for_encryption_mode(self,key_manager):
         self.mode = input("Enter desired encryption mode (ECB/CFB) : ")
@@ -34,8 +37,34 @@ class Node :
         aes = pyaes.AES(new_k)
         self.k2 = bytes(aes.decrypt(self.k2)).decode()
     
+    def getCriptoText(self,cipherText):
+        self.ciphertext += cipherText
 
-    def sendOkMessage(message):
+    def startDecryptionECB(self):
+        initialMessage = ECB_decryption(self.ciphertext,self.k1)
+        print(initialMessage)
+    
+    def startDecryptionCFB(self):
+        initialMessage = CFB_decryption(self.ciphertext,self.k2)
+        print(initialMessage)
+
+    def sendOkMessage(self,message):
         return message
-    def setOkMessage(self,message):
+
+    def setOkMessage(self,message,B):
         self.message = message
+        if(self.message == "we can start encryption!"):
+            if(self.mode=="ECB"):
+                f = open("file.txt", "r")
+                originalText = f.read()
+                self.ciphertext = ECB_encryption(originalText,self.k1)
+                for i in range(0,len(self.ciphertext),16):
+                    B.getCriptoText(self.ciphertext[i:i+16])
+                B.startDecryptionECB()
+            else:
+                f = open("file.txt", "r")
+                originalText = f.read()
+                self.ciphertext = CFB_encryption(originalText,self.k2)
+                for i in range(0,len(self.ciphertext),16):
+                    B.getCriptoText(self.ciphertext[i:i+16])
+                B.startDecryptionCFB()
