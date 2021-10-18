@@ -7,7 +7,7 @@ class MC:
     def __init__(self):
         self.k1 = ''.join(choice(ascii_uppercase) for i in range(16))
         self.k2 = ''.join(choice(ascii_uppercase) for i in range(16))
-        self.k = "ANDREEAMADALINAV"
+        self.k = "ANDREEAVINAMADAL"
     def getKKey(self):
         return self.k
     def get_k1_encryption(self):
