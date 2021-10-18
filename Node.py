@@ -6,13 +6,25 @@ class Node :
     def __init__(self):
         self.k = "ANDREEAVINAMADAL"
         self.ciphertext = []
+        
+    def get_key_from_MC(self,key_manager):
+        if(self.mode == "ECB"):
+            self.set_k1(key_manager.get_k1_encryption())
+            self.k1_decryption()
+        else: 
+            self.set_k2(key_manager.get_k2_encryption())
+            self.k2_decryption()
     #ask the user to choose between ECB encryption and CFB encryption
-    def ask_for_encryption_mode(self,key_manager):
+    def ask_for_encryption_mode(self,key_manager,B):
         self.mode = input("Enter desired encryption mode (ECB/CFB) : ")
         while self.mode != "ECB" and self.mode!="CFB":
             print("Try again! ")
             self.mode = input("Enter desired encryption mode (ECB/CFB) : ")
-        return self.mode
+        B.setEncryptionMode(self.mode)
+        B.get_key_from_MC(key_manager)
+        self.get_key_from_MC(key_manager)
+        self.setOkMessage(B.sendOkMessage("we can start encryption!"),B)
+    
     #send the encryption mode to node B
     def sendEncryptionMode(self):
         return self.mode
@@ -41,12 +53,12 @@ class Node :
         self.ciphertext += cipherText
 
     def startDecryptionECB(self):
-        initialMessage = ECB_decryption(self.ciphertext,self.k1)
-        print(initialMessage)
+        decrypted_message = ECB_decryption(self.ciphertext,self.k1)
+        print("Decrypted message by node B: \n" + decrypted_message)
     
     def startDecryptionCFB(self):
-        initialMessage = CFB_decryption(self.ciphertext,self.k2)
-        print(initialMessage)
+        decrypted_message = CFB_decryption(self.ciphertext,self.k2)
+        print("Decrypted message by node B: \n" + decrypted_message)
 
     def sendOkMessage(self,message):
         return message
